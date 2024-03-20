@@ -1,5 +1,4 @@
-{
-  "leaderboard": [
+[
     {
       "userName": "Valod",
       "score": 455555,
@@ -101,6 +100,65 @@
       "score": 762,
       "gender": "girl",
       "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Artur",
+      "score": 324,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Anna",
+      "score": 999999,
+      "gender": "girl",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Arusik",
+      "score": 666,
+      "gender": "girl",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Ashot",
+      "score": 1975,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Hovnatan",
+      "score": 442,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Arshaluys",
+      "score": 6879,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Tariel",
+      "score": 36289,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Telemak",
+      "score": 14,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Samvel",
+      "score": 98654,
+      "gender": "boy",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
+    },
+    {
+      "userName": "Mariam",
+      "score": 8723,
+      "gender": "girl",
+      "avatarUrl": "https://avatar.iran.liara.run/public/{0}?username={1}"
     }
-  ]
-}
+]

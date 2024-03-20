@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,9 +10,12 @@ namespace DefaultNamespace
         [SerializeField] private Button closeButton;
         [SerializeField] private Button sortButton;
         [SerializeField] private Button nextButton;
-        [SerializeField] private Button backButton;
+        [SerializeField] private Button previousButton;
         [SerializeField] private RectTransform container;
         [SerializeField] private LeaderboardEntryItem entryItemTemplatePrefab;
+        [SerializeField] private string highlightUserName;
+
+        [SerializeField] private LeaderboardController controller;
 
         private List<LeaderboardEntryItem> _items = new List<LeaderboardEntryItem>();
 
@@ -24,7 +26,7 @@ namespace DefaultNamespace
         {
             sortButton.onClick.AddListener(OnSortClicked);
             nextButton.onClick.AddListener(OnNextClicked);
-            backButton.onClick.AddListener(OnBackClicked);
+            previousButton.onClick.AddListener(OnPreviousClicked);
         }
 
         public void SetModel(LeaderboardModel model)
@@ -35,6 +37,7 @@ namespace DefaultNamespace
 
         private void OnLeaderboardLoaded()
         {
+            SetNavigationState();
             if (!_areItemsInitialized)
             {
                 PopulateItems();
@@ -49,42 +52,54 @@ namespace DefaultNamespace
         {
             for (int i = 0; i < _items.Count; i++)
             {
-                var entry = _model.LeaderboardInfo.Leaderboard[i];
+                if (i >= _model.LeaderboardResult.Entries.Length)
+                {
+                    _items[i].gameObject.SetActive(false);
+                    continue;
+                }
+
+                _items[i].gameObject.SetActive(true);
+                var entry = _model.LeaderboardResult.Entries[i];
                 var item = _items[i];
-                item.Setup(entry);
+                var position = controller.Page * controller.Count + i;
+                item.Setup(position, entry);
+                item.Highlight(highlightUserName);
             }
         }
 
         private void PopulateItems()
         {
-            foreach (var entry in _model.LeaderboardInfo.Leaderboard)
+            _items.Clear();
+            for (int i = 0; i < controller.Count; i++)
             {
                 var item = Instantiate(entryItemTemplatePrefab, container);
-                item.Setup(entry);
+                var entry = _model.LeaderboardResult.Entries[i];
+                var position = controller.Page * controller.Count + i;
+                item.Setup(position, entry);
+                item.Highlight(highlightUserName);
                 _items.Add(item);
             }
         }
 
         private void OnSortClicked()
         {
-            _model.ChangeSortingOrder();
-            _model.Load();
+            controller.Sort();
         }
-        
-        private void OnBackClicked()
+
+        private void OnPreviousClicked()
         {
-            _model.ChangeBackPage();
-            _model.Load();
+            controller.PreviousPage();
         }
-        
+
         private void OnNextClicked()
         {
-            _model.ChangeNextPage();
-            _model.Load();
-            // if (_model.LeaderboardInfo.Leaderboard.Length < 5)
-            // {
-            //     nextButton.interactable = false;
-            // }
+            controller.NextPage();
+        }
+
+        private void SetNavigationState()
+        {
+            previousButton.interactable = controller.Page > 0;
+            nextButton.interactable = controller.HasNext;
         }
     }
 }

@@ -11,15 +11,25 @@ namespace DefaultNamespace
     {
         [SerializeField] private TextMeshProUGUI positionText;
         [SerializeField] private RawImage avatarImage;
+        [SerializeField] private RawImage backgroundImage;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private RectTransform highlightBackground;
 
-        public void Setup(LeaderboardEntryInfo entryInfo)
+        private LeaderboardEntryInfo _entryInfo;
+        private Coroutine _imageDownloaderRoutine;
+
+        public void Setup(int index,LeaderboardEntryInfo entryInfo)
         {
-            positionText.text = $"{transform.GetSiblingIndex() + 1}";
+            _entryInfo = entryInfo;
+            positionText.text = $"{index + 1}";
             nameText.text = entryInfo.UserName;
             scoreText.text = entryInfo.Score.ToString();
-            StartCoroutine(RetrieveAvatarRoutine(entryInfo));
+            if (_imageDownloaderRoutine!=null)
+            {
+                StopCoroutine(_imageDownloaderRoutine);
+            }
+            _imageDownloaderRoutine=StartCoroutine(RetrieveAvatarRoutine(entryInfo));  
         }
 
         private IEnumerator RetrieveAvatarRoutine(LeaderboardEntryInfo info)
@@ -31,5 +41,12 @@ namespace DefaultNamespace
             yield return request.SendWebRequest();
             avatarImage.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
+
+        public void Highlight(string userName)
+        {
+            highlightBackground.gameObject.SetActive(userName == _entryInfo.UserName);
+        }
+        
+        
     }
 }

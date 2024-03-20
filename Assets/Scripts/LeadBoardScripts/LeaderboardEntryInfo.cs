@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 namespace DefaultNamespace
 {
     public struct LeaderboardEntryInfo
