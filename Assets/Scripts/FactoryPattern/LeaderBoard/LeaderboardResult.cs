@@ -1,4 +1,4 @@
-namespace DefaultNamespace
+namespace FactoryPattern.LeaderBoard
 {
     public struct LeaderboardResult
     {

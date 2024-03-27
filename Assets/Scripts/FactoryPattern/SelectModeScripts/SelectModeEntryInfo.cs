@@ -1,4 +1,4 @@
-namespace SelectModeScripts
+namespace FactoryPattern.SelectModeScripts
 {
     public class SelectModeEntryInfo
     {

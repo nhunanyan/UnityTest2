@@ -2,7 +2,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace SelectModeScripts
+namespace FactoryPattern.SelectModeScripts
 {
     public class SelectModeDataLoader
     {
@@ -10,7 +10,7 @@ namespace SelectModeScripts
         {
             var json = Resources.Load<TextAsset>("Data/selectmodeboard").text;
             var selectModeBoard = JsonConvert.DeserializeObject<SelectModeInfo>(json);
-            int count = selectModeBoard.SelectMode.GetLength(0);
+            int count = selectModeBoard.SelectMode.Length;
             selectModeBoard.SelectMode = selectModeBoard.SelectMode.Take(count).ToArray();
 
             return selectModeBoard;

@@ -2,7 +2,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace FactoryPattern.LeaderBoard
 {
     public static class LeaderboardDataLoader
     {

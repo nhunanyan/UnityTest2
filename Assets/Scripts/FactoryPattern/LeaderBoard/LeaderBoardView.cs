@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
+using FactoryPattern.Menu;
+using Test;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-namespace DefaultNamespace
+namespace FactoryPattern.LeaderBoard
 {
-    public class LeaderboardView : MonoBehaviour
+    public class LeaderBoardView : AbstractView<LeaderBoardController, LeaderBoardModel>
     {
+        
         [SerializeField] private Button closeButton;
         [SerializeField] private Button sortButton;
         [SerializeField] private Button nextButton;
@@ -15,26 +18,28 @@ namespace DefaultNamespace
         [SerializeField] private LeaderboardEntryItem entryItemTemplatePrefab;
         [SerializeField] private string highlightUserName;
 
-        [SerializeField] private LeaderboardController controller;
-
         private List<LeaderboardEntryItem> _items = new List<LeaderboardEntryItem>();
 
         private bool _areItemsInitialized;
-        private LeaderboardModel _model;
+        internal override void Initialize()
+        {
+            Model.OnLeaderboardLoaded += OnLeaderboardLoaded;
+        }
 
         private void Start()
         {
             sortButton.onClick.AddListener(OnSortClicked);
             nextButton.onClick.AddListener(OnNextClicked);
             previousButton.onClick.AddListener(OnPreviousClicked);
+            closeButton.onClick.AddListener(OnCloseClicked);
         }
 
-        public void SetModel(LeaderboardModel model)
+        private void OnCloseClicked()
         {
-            _model = model;
-            _model.OnLeaderboardLoaded += OnLeaderboardLoaded;
+            Controller.Hide();
+            UIManager.Instance.Show<MenuView, MenuController, MenuModel>();
         }
-
+        
         private void OnLeaderboardLoaded()
         {
             SetNavigationState();
@@ -52,16 +57,16 @@ namespace DefaultNamespace
         {
             for (int i = 0; i < _items.Count; i++)
             {
-                if (i >= _model.LeaderboardResult.Entries.Length)
+                if (i >= Model.LeaderboardResult.Entries.Length)
                 {
                     _items[i].gameObject.SetActive(false);
                     continue;
                 }
 
                 _items[i].gameObject.SetActive(true);
-                var entry = _model.LeaderboardResult.Entries[i];
+                var entry = Model.LeaderboardResult.Entries[i];
                 var item = _items[i];
-                var position = controller.Page * controller.Count + i;
+                var position = Controller.Page * Controller.Count + i;
                 item.Setup(position, entry);
                 item.Highlight(highlightUserName);
             }
@@ -70,11 +75,11 @@ namespace DefaultNamespace
         private void PopulateItems()
         {
             _items.Clear();
-            for (int i = 0; i < controller.Count; i++)
+            for (int i = 0; i < Controller.Count; i++)
             {
                 var item = Instantiate(entryItemTemplatePrefab, container);
-                var entry = _model.LeaderboardResult.Entries[i];
-                var position = controller.Page * controller.Count + i;
+                var entry = Model.LeaderboardResult.Entries[i];
+                var position = Controller.Page * Controller.Count + i;
                 item.Setup(position, entry);
                 item.Highlight(highlightUserName);
                 _items.Add(item);
@@ -83,23 +88,25 @@ namespace DefaultNamespace
 
         private void OnSortClicked()
         {
-            controller.Sort();
+            Controller.Sort();
         }
 
         private void OnPreviousClicked()
         {
-            controller.PreviousPage();
+            Controller.PreviousPage();
         }
 
         private void OnNextClicked()
         {
-            controller.NextPage();
+            Controller.NextPage();
         }
 
         private void SetNavigationState()
         {
-            previousButton.interactable = controller.Page > 0;
-            nextButton.interactable = controller.HasNext;
+            previousButton.interactable = Controller.Page > 0;
+            nextButton.interactable = Controller.HasNext;
         }
+
+        
     }
 }

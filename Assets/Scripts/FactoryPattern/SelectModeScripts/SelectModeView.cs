@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using FactoryPattern.Menu;
+using Test;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
-namespace SelectModeScripts
+namespace FactoryPattern.SelectModeScripts
 {
-    public class SelectModeView : MonoBehaviour
+    public class SelectModeView : AbstractView<SelectModeController, SelectModeModel>
     {
         [SerializeField] private Button closeButton;
         [SerializeField] private Button endButton;
@@ -17,21 +19,27 @@ namespace SelectModeScripts
         private List<SelectModeEntryItem> _items = new List<SelectModeEntryItem>();
 
         private bool _areItemsInitialized;
-        private SelectModeModel _model;
+
+        internal override void Initialize()
+        {
+            Model.OnSelectModeLoaded += OnSelectModeLoaded;
+        }
 
         private void Start()
         {
             endButton.onClick.AddListener(OnEndClicked);
             startButton.onClick.AddListener(OnStartClicked);
-        }
-        
-        public void SetModel(SelectModeModel model)
-        {
-            _model = model;
-            _model.OnLeaderboardLoaded += OnLeaderboardLoaded;
+            closeButton.onClick.AddListener(OnCloseClicked);
         }
 
-        private void OnLeaderboardLoaded()
+        private void OnCloseClicked()
+        {
+            Controller.Hide();
+            UIManager.Instance.Show<MenuView, MenuController, MenuModel>();
+        }
+
+
+        private void OnSelectModeLoaded()
         {
             endButton.interactable = true;
             startButton.interactable = false;
@@ -49,7 +57,7 @@ namespace SelectModeScripts
         {
             for (int i = 0; i < _items.Count; i++)
             {
-                var entry = _model.SelectModeInfo.SelectMode[i];
+                var entry = Model.SelectModeInfo.SelectMode[i];
                 var item = _items[i];
                 item.Setup(entry);
             }
@@ -57,7 +65,7 @@ namespace SelectModeScripts
 
         private void PopulateItems()
         {
-            foreach (var entry in _model.SelectModeInfo.SelectMode)
+            foreach (var entry in Model.SelectModeInfo.SelectMode)
             {
                 var item = Instantiate(entryItemTemplatePrefab, container);
                 item.Setup(entry);
@@ -82,5 +90,6 @@ namespace SelectModeScripts
             endButton.interactable = !endButton.interactable;
             startButton.interactable = !startButton.interactable;
         }
+        
     }
 }

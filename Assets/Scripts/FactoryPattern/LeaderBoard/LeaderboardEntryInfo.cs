@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
-
-namespace DefaultNamespace
+namespace FactoryPattern.LeaderBoard
 {
     public struct LeaderboardEntryInfo
     {

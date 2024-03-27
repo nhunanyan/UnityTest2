@@ -5,13 +5,12 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace DefaultNamespace
+namespace FactoryPattern.LeaderBoard
 {
     public class LeaderboardEntryItem : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI positionText;
         [SerializeField] private RawImage avatarImage;
-        [SerializeField] private RawImage backgroundImage;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private RectTransform highlightBackground;
@@ -19,17 +18,18 @@ namespace DefaultNamespace
         private LeaderboardEntryInfo _entryInfo;
         private Coroutine _imageDownloaderRoutine;
 
-        public void Setup(int index,LeaderboardEntryInfo entryInfo)
+        public void Setup(int index, LeaderboardEntryInfo entryInfo)
         {
             _entryInfo = entryInfo;
             positionText.text = $"{index + 1}";
             nameText.text = entryInfo.UserName;
             scoreText.text = entryInfo.Score.ToString();
-            if (_imageDownloaderRoutine!=null)
+            if (_imageDownloaderRoutine != null)
             {
                 StopCoroutine(_imageDownloaderRoutine);
             }
-            _imageDownloaderRoutine=StartCoroutine(RetrieveAvatarRoutine(entryInfo));  
+
+            _imageDownloaderRoutine = StartCoroutine(RetrieveAvatarRoutine(entryInfo));
         }
 
         private IEnumerator RetrieveAvatarRoutine(LeaderboardEntryInfo info)
@@ -46,7 +46,5 @@ namespace DefaultNamespace
         {
             highlightBackground.gameObject.SetActive(userName == _entryInfo.UserName);
         }
-        
-        
     }
 }

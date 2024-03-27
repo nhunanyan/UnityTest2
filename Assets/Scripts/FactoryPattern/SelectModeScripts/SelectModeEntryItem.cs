@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace SelectModeScripts
+namespace FactoryPattern.SelectModeScripts
 {
     public class SelectModeEntryItem : MonoBehaviour
     {
